@@ -1,0 +1,22 @@
+openssl req  -newkey rsa:2048 -nodes -keyout domain.key    -out domain.csr
+
+--  openssl req  -newkey rsa:2048 -nodes -keyout domain.pem    -out domain.csr
+
+openssl x509 -signkey domain.key -in domain.csr -req -days 365 -out domain.crt
+
+-- openssl x509 -signkey domain.pem -in domain.csr -req -days 365 -out domain.crt
+
+openssl pkcs12 -inkey domain.key -in domain.crt -export -out domain.pfx
+
+-- openssl pkcs12 -export -out domain.p12 -inkey domain.pem -in domain.crt
+
+
+-- keytool -importkeystore -srckeystore domain.p12 -srcstoretype PKCS12 -deststoretype JKS -destkeystore domain.jks
+
+-- keytool -importkeystore -srckeystore domain.p12 -srcstorepass sanki123 -deststorepass sanki123 -destkeystore truststore.p12 -noprompt
+
+-- java -Xms1024m -Xmx1524m -Djavax.net.ssl.trustStore=...p12 -Djavax.net.ssl.trustStorePassword=sanki123 -Djdk.tls.client.protocol="TLSv1.2" -jar app.jar
+
+keytool -genkey -alias my_ssl_key -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore sanki.jks -validity 3650
+
+
